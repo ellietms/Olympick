@@ -1,1 +1,1 @@
-# Olympick
+# Olympick app
