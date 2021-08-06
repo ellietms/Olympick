@@ -3,12 +3,10 @@ from pprint import pprint as pp
 from datetime import datetime, timedelta
 
 
-def call_endpoint1():
-    endpoint1 = 'https://olypi.com/sports/?call=GetAllSports'
-    response = requests.get(endpoint1)
+def getAllSports():
+    allSportsData = 'https://olypi.com/sports/?call=getAllSports'
+    response = requests.get(allSportsData)
     data = response.json()
-    # print(response.status_code)
-    # pp(data)
     return data
 
 
@@ -24,8 +22,6 @@ def call_endpoint2(sports_id):
     endpoint2 = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sports_id)
     response = requests.get(endpoint2)
     data2 = response.json()
-    # print(response.status_code)
-    # pp(data2)
     return data2
 
 
@@ -37,8 +33,6 @@ def return_events(data2):
         end_of_event = item['end']
         case = {'event': event, 'start': start_of_event, 'end': end_of_event}
         list_of_entries.append(case)
-        # print(str(event), str(start_of_event), str(end_of_event))
-    # print(list_of_entries)
     return(list_of_entries)
 
 
@@ -69,8 +63,8 @@ def present_schedule(list_of_formatted_entries):
 
 
 def run():
-    data = call_endpoint1()
-    input1 = input("What sport do u want").capitalize() # is no longer case sensitive
+    data = getAllSports()
+    input1 = input("What sport are you looking for ?  ").capitalize() # is no longer case sensitive
     sports_id = get_sports_id(input1, data)
     data2 = call_endpoint2(sports_id)
     list_of_entries = return_events(data2)
