@@ -56,3 +56,9 @@ def getSportLocation(sport_id):
 
 
 # get schedule
+def run():
+    question = input("What sport are you looking for ?  ")
+
+
+if __name__ == '__main__':
+    run()
