@@ -3,9 +3,9 @@ from pprint import pprint as pp
 from datetime import datetime, timedelta
 
 
-def getAllSports():
-    allSportsData = 'https://olypi.com/sports/?call=GetAllSports'
-    response = requests.get(allSportsData)
+def get_all_sports():
+    all_sports_data = 'https://olypi.com/sports/?call=GetAllSports'
+    response = requests.get(all_sports_data)
     data = response.json()
     return data
 
@@ -33,7 +33,7 @@ def return_events(data2):
         end_of_event = item['end']
         case = {'event': event, 'start': start_of_event, 'end': end_of_event}
         list_of_entries.append(case)
-    return(list_of_entries)
+    return list_of_entries
 
 
 def date_formatting(list_of_entries):
@@ -63,7 +63,7 @@ def present_schedule(list_of_formatted_entries):
 
 
 def run():
-    data = getAllSports()
+    data = get_all_sports()
     input1 = input("What sport are you looking for ?  ").capitalize() # is no longer case sensitive
     sports_id = get_sports_id(input1, data)
     data2 = call_endpoint2(sports_id)
