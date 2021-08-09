@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 
 def getAllSports():
-    allSportsData = 'https://olypi.com/sports/?call=getAllSports'
+    allSportsData = 'https://olypi.com/sports/?call=GetAllSports'
     response = requests.get(allSportsData)
     data = response.json()
     return data

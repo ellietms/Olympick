@@ -1,6 +1,6 @@
 import requests
 from helperFunctions import formattedData
-from pprint import pprint  as pp
+from pprint import pprint as pp
 
 
 # Get specific sport by id
@@ -10,6 +10,8 @@ def getAllSports():
     response = requests.get(allSports)
     allSportsData = response.json()
     return allSportsData
+
+
 # pp(getAllSports())
 
 
@@ -18,10 +20,10 @@ def getSportsById(sport_id):
     specificSport = 'https://olypi.com/sports/?call=GetSport&id={}'.format(sport_id)
     response = requests.get(specificSport)
     dataSpecificSport = response.json()
-    return  dataSpecificSport
+    return dataSpecificSport
+
 
 # pp(getSportsById(12))
-
 
 
 # get sports Events by their ids
@@ -30,10 +32,10 @@ def getEventsById(sport_id):
     specificSportEvent = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
     response = requests.get(specificSportEvent)
     dataSpecificSportEvent = response.json()
-    return  dataSpecificSportEvent
+    return dataSpecificSportEvent
+
 
 getEventsById(12)
-
 
 
 # Get All Locations
@@ -41,9 +43,10 @@ def getAllLocations():
     allSportsLocations = 'https://olypi.com/locations/?call=GetAllLocations'
     response = requests.get(allSportsLocations)
     dataAllLocations = response.json()
-    return  dataAllLocations
-# pp(getAllLocations())
+    return dataAllLocations
 
+
+# pp(getAllLocations())
 
 
 # get locations by ids
@@ -51,7 +54,7 @@ def getSportLocation(sport_id):
     sportLocation = 'https://olypi.com/locations/?call=GetLocation&id={}'.format(sport_id)
     response = requests.get(sportLocation)
     dataLocationSpecificSport = response.json()
-    return  dataLocationSpecificSport
+    return dataLocationSpecificSport
 # pp(getSportLocation(20))
 
 
