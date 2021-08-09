@@ -32,7 +32,7 @@ def getEventsById(sport_id):
     dataSpecificSportEvent = response.json()
     return  dataSpecificSportEvent
 
-getEventsById(12)
+pp(getEventsById(12))
 
 
 
