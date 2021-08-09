@@ -5,56 +5,54 @@ from pprint import pprint as pp
 
 # Get specific sport by id
 # returns all sports names and their ids
-def getAllSports():
-    allSports = 'https://olypi.com/sports/?call=GetAllSports'
-    response = requests.get(allSports)
-    allSportsData = response.json()
-    return allSportsData
-
+def get_all_sports():
+    all_sports = 'https://olypi.com/sports/?call=GetAllSports'
+    response = requests.get(all_sports)
+    all_sports_data = response.json()
+    return all_sports_data
 
 # pp(getAllSports())
 
 
 # get the sports details (name  and schedule link) by it's id
-def getSportsById(sport_id):
-    specificSport = 'https://olypi.com/sports/?call=GetSport&id={}'.format(sport_id)
-    response = requests.get(specificSport)
-    dataSpecificSport = response.json()
-    return dataSpecificSport
-
+def get_sports_by_id(sport_id):
+    specific_sport = 'https://olypi.com/sports/?call=GetSport&id={}'.format(sport_id)
+    response = requests.get(specific_sport)
+    data_specific_sport = response.json()
+    return data_specific_sport
 
 # pp(getSportsById(12))
 
 
 # get sports Events by their ids
 @formattedData
-def getEventsById(sport_id):
-    specificSportEvent = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
-    response = requests.get(specificSportEvent)
-    dataSpecificSportEvent = response.json()
-    return dataSpecificSportEvent
+def get_events_by_id(sport_id):
+    specific_sport_event = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
+    response = requests.get(specific_sport_event)
+    data_specific_sport_event = response.json()
+    return data_specific_sport_event
 
 
-getEventsById(12)
+get_events_by_id(12)
 
 
 # Get All Locations
-def getAllLocations():
-    allSportsLocations = 'https://olypi.com/locations/?call=GetAllLocations'
-    response = requests.get(allSportsLocations)
-    dataAllLocations = response.json()
-    return dataAllLocations
-
+def get_all_locations():
+    all_sports_locations = 'https://olypi.com/locations/?call=GetAllLocations'
+    response = requests.get(all_sports_locations)
+    data_all_locations = response.json()
+    return data_all_locations
 
 # pp(getAllLocations())
 
 
 # get locations by ids
-def getSportLocation(sport_id):
-    sportLocation = 'https://olypi.com/locations/?call=GetLocation&id={}'.format(sport_id)
-    response = requests.get(sportLocation)
-    dataLocationSpecificSport = response.json()
-    return dataLocationSpecificSport
+def get_sport_location(sport_id):
+    sport_location = 'https://olypi.com/locations/?call=GetLocation&id={}'.format(sport_id)
+    response = requests.get(sport_location)
+    data_location_specific_sport = response.json()
+    return data_location_specific_sport
+
 # pp(getSportLocation(20))
 
 
