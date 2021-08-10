@@ -76,7 +76,7 @@ def getAllNames(nestedFunction):
     return  inner_wrapper
 
 
-def findTheSportByName(nestedFunction):
+def findAllSpecificEvents(nestedFunction):
     def inner_wrapper(sport_name):
         sport_id = nestedFunction(sport_name)
         getAllSpecificEvents = getEventsBySportId(sport_id)
@@ -87,7 +87,7 @@ def findTheSportByName(nestedFunction):
 
 # get sports Events by their names
 @getAllNames
-@findTheSportByName
+@findAllSpecificEvents
 def findEventIdByName(sport_name):
     all_data = getAllSports()
     for sport in all_data['result']:
