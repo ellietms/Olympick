@@ -24,10 +24,10 @@ def getSportsById(sport_id):
     dataSpecificSport = response.json()
     return  dataSpecificSport
 
-print("///////////////")
-print("Just get  all the sports by specific id")
-pp(getSportsById(12))
-print("======End======")
+# print("///////////////")
+# print("Just get  all the sports by specific id")
+# pp(getSportsById(12))
+# print("======End======")
 
 
 
@@ -58,10 +58,10 @@ def getEventsBySportId(sport_id):
     dataSpecificSportEvent = response.json()
     return  dataSpecificSportEvent
 
-print("///////////////")
-print("show all the different sport events for specific sport id")
-pp(getEventsBySportId(12))
-print("===End===")
+# print("///////////////")
+# print("show all the different sport events for specific sport id")
+# pp(getEventsBySportId(12))
+# print("===End===")
 
 
 
@@ -80,7 +80,8 @@ def findAllSpecificEvents(nestedFunction):
     def inner_wrapper(sport_name):
         sport_id = nestedFunction(sport_name)
         getAllSpecificEvents = getEventsBySportId(sport_id)
-        print("All events",getAllSpecificEvents)
+        print("All events for this id is : ",end = "")
+        pp(getAllSpecificEvents)
         return  getAllSpecificEvents
     return  inner_wrapper
 
@@ -92,13 +93,15 @@ def findEventIdByName(sport_name):
     all_data = getAllSports()
     for sport in all_data['result']:
         if sport['name'] == sport_name:
+           print(f"for {sport_name} id is {sport['id']}")
            return sport['id']
 
 
-print("///////////////")
-print("ALL THE RESULTS OF SPECIFIC NAME")
-pp(findEventIdByName('3x3 Basketball'))
-print("///////////////")
+
+# print("///////////////")
+# print("ALL THE RESULTS OF SPECIFIC NAME")
+# pp(findEventIdByName('3x3 Basketball'))
+# print("///////////////")
 
 
 
