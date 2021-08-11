@@ -2,7 +2,7 @@
 # show the events by getting the id of the sports
 # show the location of the events
 import requests
-from pprint import pprint  as pp
+from pprint import pprint as pp
 from datetime import datetime, timedelta
 
 
