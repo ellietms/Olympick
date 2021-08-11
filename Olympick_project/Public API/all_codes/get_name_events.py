@@ -1,5 +1,4 @@
 from all_functions import find_event , get_all_sports
-from pprint import pprint as pp
 
 
 def run():
