@@ -8,7 +8,7 @@ This app allow a user to : <br/>
 
 # Tools
 
-Public API : [Olympic Public API](https://olypi.com)
+Public API : [Olympic Public API](https://olypic.com)
  
 
  
