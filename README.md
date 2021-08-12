@@ -8,7 +8,12 @@ This app allow a user to : <br/>
 
 # Tools
 
-Public API : [Olympic Public API](https://olypi.com/)
+<li> 2020 Olympic Public API : [Olympic Public API](https://olypi.com/) </li>
+<li> SQL databases</li>
+<li> Python language</li>
+<li> Python Libraries : </li>
+
+
  
 
  
