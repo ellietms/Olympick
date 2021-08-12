@@ -11,7 +11,7 @@ This app allow a user to : <br/>
 <li> 2020 Olympic Public API : (https://olypi.com/) </li>
 <li> SQL databases</li>
 <li> Python language</li>
-<li> Python Libraries : <strong>Flask</strong>,<strong>Collections</strong> </li>,etc
+<li> Python Libraries : <strong>Flask</strong>,<strong>Collections</strong>,etc </li>
 <li>Tests : Unit tests and mock tests</li>
 
 
