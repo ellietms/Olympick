@@ -8,11 +8,12 @@ This app allow a user to : <br/>
 
 # Tools
 
-<li> 2020 Olympic Public API : <br/> </li>
-[Olympic Public API](https://olypi.com/) 
+<li> 2020 Olympic Public API : (https://olypi.com/) </li>
 <li> SQL databases</li>
 <li> Python language</li>
-<li> Python Libraries : </li>
+<li> Python Libraries : **Flask** , **Collections** </li>
+<li>Tests : Unit tests and mock tests</li>
+
 
 
  
