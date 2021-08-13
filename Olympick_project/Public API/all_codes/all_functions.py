@@ -114,6 +114,7 @@ def add_specific_event(result):
         array.append(adding_event)
     return array
 
+
 def remove_event(result):
     inp = input("Choose the numbers of the event(s) you would like to remove to your schedule!")
     array_remove = []
