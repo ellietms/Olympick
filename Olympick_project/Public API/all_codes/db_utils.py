@@ -192,6 +192,7 @@ def verify_password(username, password):
 
     return password
 
+
 def verify_existing_username(username):
     try:
         db_name = 'olympick'
