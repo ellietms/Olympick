@@ -16,6 +16,7 @@ def _connect_to_db(db_name):
     )
     return cnx
 
+
 def get_entire_schedule(username):
     try:
         db_name = 'olympick'
@@ -158,8 +159,8 @@ def verify_new_username(username):
 def verify_password(username, password):
     try:
         db_name = 'olympick'
-        db_connection = _connect_to_db(db_name)
-        cur = db_connection.cursor()
+        db_connection = _connect_to_db(db_name) # create database connection from sqlconnector module
+        cur = db_connection.cursor() # creates the cursor
         # print("Connected to DB: %s" % db_name)
 
         query = """
@@ -209,13 +210,14 @@ def verify_existing_username(username):
 
         usernames = cur.fetchall()  # this is a list with db records where each record is a tuple
         # print(usernames)
-        for i in usernames:
-            i = str(list(i))
-            if username in i:
-                pass
-            else:
-                print("This username does not exist.")
-                quit()
+        while True:
+            for i in usernames:
+                i = str(list(i))
+                if username in i:
+                    print("Username accepted")
+                    return
+            print("Username doesn't exist")
+            return False, quit()
         cur.close()
 
     except Exception:
