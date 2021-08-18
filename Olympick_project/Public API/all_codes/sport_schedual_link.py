@@ -1,9 +1,9 @@
-from all_functions import get_all_sports
+from all_functions import endpoint_list_of_all_sports
 
 
 def run():
     all_names = []
-    all_sports = get_all_sports()
+    all_sports = endpoint_list_of_all_sports()
     generator = (sport_name for sport_name in all_names)
     for sport in all_sports['result']:
         all_names.append(sport['name'])

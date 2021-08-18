@@ -1,9 +1,11 @@
 import mysql.connector
 from config import USER, PASSWORD, HOST
 
+
 # Initialise Exception
 class DbConnectionError(Exception):
     pass
+
 
 # Function to connect to the database
 def _connect_to_db(db_name):
