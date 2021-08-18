@@ -42,6 +42,7 @@ def use_sport_id_to_return_list_of_events(nested_function):
 # or
 # If you are logging in with an old username, the username exists, you have inputted it correctly AND that
 # you have the correct password.
+# The functions within this function are all in db_utils
 def username_and_password():
     existing_user = input("Have you used our app before?").lower()
     if existing_user == 'no':
