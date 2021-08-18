@@ -1,32 +1,10 @@
-# show the events by getting the name of the sports
-# show the events by getting the id of the sports
-# show the names of events for  specific sport
-# show the location of the events
 import requests
 from datetime import datetime, timedelta
 from db_utils import verify_password, verify_existing_username, verify_new_username, remove_event_from_database, get_entire_schedule, add_event_to_database
-import collections
 
+# DECORATORS
 
-# JUST for seeing all sports names (without any other details) and this data is not related to schedule data
-def get_all_sports():
-    all_sports = 'https://olypi.com/sports/?call=GetAllSports'
-    response = requests.get(all_sports)
-    all_sports_data = response.json()
-    return all_sports_data
-
-
-
-# receive all the sports details with the same sport id
-def get_sports_by_id(sport_id):
-    specific_sport = 'https://olypi.com/sports/?call=GetSport&id={}'.format(sport_id)
-    response = requests.get(specific_sport)
-    data_specific_sport = response.json()
-    return data_specific_sport
-
-
-
-# decorator for formatting the current data to uk time
+# Formats event data into a more aesthetic format, and also into UK time
 def format_data(nested_function):
     def inner_wrapper(*args):
         all_data = []
@@ -47,86 +25,24 @@ def format_data(nested_function):
 
     return inner_wrapper
 
-
-
-# final result : receiving all sports events with UK time
-@format_data
-def get_events_by_sport_id(sport_id):
-    specific_sport_event = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
-    response = requests.get(specific_sport_event)
-    data_specific_sport_event = response.json()
-    return data_specific_sport_event
-
-
-# decorator for just showing the event names
-def get_all_names(nested_function):
-    def inner_wrapper(func):
-        all_names = []
-        data = nested_function(func)
-        for eachSport in data:
-            event_name = eachSport['event_name']
-            all_names.append(event_name)
-        return all_names
-
-    return inner_wrapper
-
-
-#decorator for just getting the all events of the specific sport
-
-def find_all_specific_events(nested_function):
+# Uses the sport_id to call endpoint 2 of the API and return a list of all events and schedules for that sport.
+def use_sport_id_to_return_list_of_events(nested_function):
     def inner_wrapper(sport_name):
         sport_id = nested_function(sport_name)
-        get_all_specific_events = get_events_by_sport_id(sport_id)
+        get_all_specific_events = endpoint_list_of_all_events(sport_id)
         return get_all_specific_events
 
     return inner_wrapper
 
 
-# get all sports Events by giving a sport name
+# FUNCTIONS (chronological order)
 
-@find_all_specific_events
-def find_event_id_by_name(sport_name):
-    all_data = get_all_sports()
-    for sport in all_data['result']:
-        if sport['name'] == sport_name:
-            return sport['id']
-
-
-
-# get just all sports names by giving a sport name
-@get_all_names
-@find_all_specific_events
-def find_event(sport_name):
-    all_data = get_all_sports()
-    for sport in all_data['result']:
-        if sport['name'] == sport_name:
-            return sport['id']
-
-
-def add_specific_event(result):
-    inp = input("Choose the number of the event(s) you would like to add to your schedule!")
-    array = []
-    inp = inp.split()
-    map_object = map(int, inp)
-    for i in map_object:
-        index = int(i) - 1
-        adding_event = result[index]
-        array.append(adding_event)
-    return array
-
-
-def remove_event(result):
-    inp = input("Choose the numbers of the event(s) you would like to remove to your schedule!")
-    array_remove = []
-    inp = inp.split()
-    map_object = map(int, inp)
-    for i in map_object:
-        index = int(i) - 1
-        adding_event = result[index]
-        array_remove.append(adding_event)
-    return array_remove
-
-
+# Verifies that:
+# If you are creating a new username, it does not already exist
+# or
+# If you are logging in with an old username, the username exists, you have inputted it correctly AND that
+# you have the correct password.
+# The functions within this function are all in db_utils
 def username_and_password():
     existing_user = input("Have you used our app before?").lower()
     if existing_user == 'no':
@@ -142,31 +58,65 @@ def username_and_password():
     return username, password
 
 
+# Calls endpoint 1 of the API, returns a list of all sports names (and other irrelevant details)
+def endpoint_list_of_all_sports():
+    all_sports = 'https://olypi.com/sports/?call=GetAllSports'
+    response = requests.get(all_sports)
+    all_sports_data = response.json()
+    return all_sports_data
+
+
+# Uses the inputted sport name to find the sport's ID for the API (find_sport_id_by_name) - then the decorator
+# uses this ID to call the API's second endpoint, to finally return a list of events within that sport.
+@use_sport_id_to_return_list_of_events
+def find_sport_id_by_name(sport_name):
+    all_data = endpoint_list_of_all_sports()
+    for sport in all_data['result']:
+        if sport['name'] == sport_name:
+            return sport['id']
+
+# (This function is part of the decorator used in the above function) Calls endpoint 2 of the API, returns a list of
+# all events within that sport and their schedules, which have been formatted to UK time by the decorator.
+@format_data
+def endpoint_list_of_all_events(sport_id):
+    list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
+    response = requests.get(list_of_events)
+    list_of_events_data = response.json()
+    return list_of_events_data
+
+# Presents the entire schedule (get_entire_schedule, a function within db_utils) and then will either add_event or
+# remove_event. The steps that follow either "add event" or "remove event" are discussed in further comments.
+
 def add_or_remove_events(username, password):
     print("Here is your current schedule: \n")
     result = get_entire_schedule(username)
-    operator = input("Would you like to: 1. Add more events or 2. Remove some events?")
+    operator = input("Would you like to:\n1. Add more events\n2. Remove some events\n3. Quit")
     if operator == '1':
-        add_events(username, password)
+        sport_name, result = choose_sport_display_events()
+        add_events(sport_name, result, username, password)
+        add_or_remove_events(username, password)
     elif operator == '2':
         array_remove = remove_event(result)
         remove_event_from_database(username, array_remove)
-        operator = input("Would you like to\n 1. Add more events\n 2. See your schedule again\n 3. Would you like to quit?")
-        if operator == '1':
-            add_events(username, password)
-        elif operator == '2':
-            get_entire_schedule(username)
-        else:
-            quit()
+        add_or_remove_events(username, password)
+    elif operator == '3':
+        print("Thanks for using Olympick! Bye!")
+        quit()
 
+# "Add events" functionality
+# Function 1/4: choose_sport_display_events
+# Presents list of all sports. User can then choose a sport, which will be used to find the sport's ID by calling
+# the API's second endpoint (find_sport_id_by_name) and return a list of events for that sport
+# (use_sport_id_to_return_list_of_events). This list is iterated through, and each event is numbered and printed.
+# This function returns the name of the sport entered, and the list of events for that sport.
 
-def add_events(username, password):
-    all_sports = get_all_sports()
+def choose_sport_display_events():
+    all_sports = endpoint_list_of_all_sports()
     print("🚩🚦 The names you can choose from are : 🚦 🚩 ")
     for sport in all_sports['result']:
         print("🎖", sport['name'], "🎖")
     sport_name = input("for which sport you would like to know the schedules ? ")
-    result = find_event_id_by_name(sport_name)
+    result = find_sport_id_by_name(sport_name)
     print(f" 🏵🤺🤸🏻‍️🏆 All the schedules for {sport_name} : 🏆🤸🤺🏵‍")
     generator2 = (res for res in result)
     index = 0
@@ -174,15 +124,51 @@ def add_events(username, password):
         index = index + 1
         print("\n", index, res['event_name'], "\nBegins at: ", res['start_event'], "\nEnds at: ", res['end_event'],
               "\n")
+    return sport_name, result
+
+# Function 2/4: add_events
+# This function uses the sport's event schedule returned in the last function to call the next one (see explanation
+# below).
+def add_events(sport_name, result, username, password):
     array = add_specific_event(result)
-    add_event_to_database(sport_name, username, array, password)
+    add_event_to_database(sport_name, username, array, password)  # inside db_utils
 
+# Function 3/4: add_specific_event
+# This function will use the entire list of that sport's events (the 'result') and use zero indexing (as the function
+# before presented the events as numbered) to find that event within the list of all the sports' events, and then
+# add it to an array.
+def add_specific_event(result):
+    add_to_database = []
+    inputted_string = input("Choose the number of the event(s) you would like to add to your schedule!")
+    split_string = inputted_string.split()
+    map_events_to_add = map(int, split_string)
+    for event in map_events_to_add:
+        index = int(event) - 1
+        event_to_add = result[index]
+        add_to_database = add_to_database + [event_to_add]
+        # add_to_database.append(event_to_add)
+    return add_to_database
 
-def filler(username, password):
-    operator = input("Would you like to see your schedule now?")
-    if operator == 'yes':
-        get_entire_schedule(username)
-        add_or_remove_events(username, password)
-    else:
-        print("See you soon!")
-        quit()
+# The fourth (4/4) "add events" function - add_event_to_database - is in the db_utils file. It uses the array
+# returned in the last function, and adds all of the events individually into that user's schedule within the database.
+# Further explanation is provided in the db_utils file.
+
+# "Remove events" functionality:
+# (1/2) Uses the result from get_entire_schedule (within the add_or_remove_events function), and the numbers inputted
+# by the user, to index the event within the schedule and creates a list from the details of each event chosen to be
+# removed.
+def remove_event(result):
+    inputted_string = input("Choose the numbers of the event(s) you would like to remove to your schedule!")
+    remove_from_database = []
+    split_string = inputted_string.split()
+    map_events_to_remove = map(int, split_string)
+    for event in map_events_to_remove:
+        index = int(event) - 1
+        event_to_remove = result[index]
+        remove_from_database.append(event_to_remove)
+    return remove_from_database
+
+# The second (2/2) "remove events" function - remove_event_from_database - is in the db_utils file. It uses the array
+# returned in the last function, and removes all of the events individually from that user's schedule within the
+# database. Further explanation is provided in the db_utils file.
+
