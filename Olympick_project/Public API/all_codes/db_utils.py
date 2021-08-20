@@ -82,7 +82,7 @@ def remove_event_from_database(username, array_remove):
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Please pick a number in your schedule!")
 
     finally:
         if db_connection:
@@ -117,7 +117,7 @@ def add_event_to_database(sport, username, array, password):
         print("Event(s) successfully added.")
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Please choose a number in the schedule of events!")
 
     finally:
         if db_connection:
