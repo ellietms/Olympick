@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session
+from flask import Flask, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import all_functions
 import db_utils
@@ -94,7 +94,6 @@ def events_added():
 def display_events_to_remove():
     username = session.get('username')
     schedule = db_utils.get_entire_schedule(username)
-    print(schedule)
     index = 0
     list_of_events = []
     for res in schedule:
