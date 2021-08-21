@@ -93,8 +93,8 @@ def find_sport_id_by_name(sport_name):
 # all events within that sport and their schedules, which have been formatted to UK time by the decorator.
 @format_data
 def endpoint_list_of_all_events(sport_id):
-    list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
     try:
+        list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
         response = requests.get(list_of_events)
         list_of_events_data = response.json()
         return list_of_events_data
@@ -121,7 +121,8 @@ def add_or_remove_events(username, password):
         print("Thanks for using Olympick! Bye!")
         quit()
     else:
-        raise ValueError("A choice of 1, 2 or 3 should be entered")
+        print("\n***** Please enter a choice between 1, 2 or 3 *****\n")
+        add_or_remove_events(username, password)
 
 
 # "Add events" functionality
@@ -182,6 +183,7 @@ def add_specific_event(result):
 # by the user, to index the event within the schedule and creates a list from the details of each event chosen to be
 # removed.
 def remove_event(result):
+
     inputted_string = input("Choose the number(s) of the event(s) you would like to remove from your schedule! ")
     remove_from_database = []
     split_string = inputted_string.split()

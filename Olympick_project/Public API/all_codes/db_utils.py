@@ -82,7 +82,7 @@ def remove_event_from_database(username, array_remove):
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Please pick a number in your schedule!")
+        raise DbConnectionError("Failed to pick a number in your schedule!")
 
     finally:
         if db_connection:
