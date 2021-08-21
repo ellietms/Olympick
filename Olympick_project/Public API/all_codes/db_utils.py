@@ -143,11 +143,7 @@ def verify_new_username(username):
 
         usernames = cur.fetchall()
         for database_username in usernames:
-            print("usernames in database",usernames)
-            print("current database username",database_username)
             database_username = str(list(database_username))
-            print("list modified",list(database_username))
-            print("string modi",database_username)
             if username in database_username:
                 print('Sorry this username is already exist, please use another username')
                 quit()
