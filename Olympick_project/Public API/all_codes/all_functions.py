@@ -102,6 +102,7 @@ def add_or_remove_events(username, password):
     elif operator == '3':
         print("Thanks for using Olympick! Bye!")
         quit()
+    return sport_name, result, array_remove
 
 # "Add events" functionality
 # Function 1/4: choose_sport_display_events
