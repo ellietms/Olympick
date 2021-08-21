@@ -4,7 +4,7 @@ USE olympick;
 CREATE TABLE `schedule` (
   `username` varchar(45),
   `sport` varchar(45) DEFAULT NULL,
-  `event` varchar(45) DEFAULT NULL,
+  `event` varchar(200) DEFAULT NULL,
   `beginning` varchar(45) DEFAULT NULL,
   `end` varchar(45) DEFAULT NULL,
   `password` varchar(45)
