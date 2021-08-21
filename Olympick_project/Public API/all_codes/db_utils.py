@@ -40,20 +40,21 @@ def get_entire_schedule(username):
         cur.execute(query)
 
         schedule = cur.fetchall()
-        event_number = 0
+        event_number = 1
+        print(f"\n 🗓📆 Your current personalised olympick schedule 🗓📆: \n")
         for event in schedule:
             event = list(event)
-            event_number = event_number + 1
-            print(event_number, event[1], "({})".format(event[0]), "\nBegins at: ", event[2], "\nEnds at: ", event[3], "\n")
+            print("🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹")
+            print(event_number,")","Event name:",event[1], "(🔻{}🔻)".format(event[0]), "\nBegins at: ", event[2], "\nEnds at: ", event[3])
+            event_number += 1
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Sorry, we are not able to read data from database, please try again!")
 
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
     return schedule
 
 # Creates connection and cursor.
@@ -82,12 +83,11 @@ def remove_event_from_database(username, array_remove):
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to pick a number in your schedule!")
+        raise DbConnectionError("Sorry, we are not able to read data from database, please try again!")
 
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
 
 # Creates connection and cursor.
 # Uses the list of events to add from a previous function.
@@ -98,7 +98,6 @@ def add_event_to_database(sport, username, array, password):
         db_name = 'olympick'
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
-        # print("Connected to DB: %s" % db_name)
 
         records_to_add = []
         for i in range(len(array)):
@@ -122,7 +121,7 @@ def add_event_to_database(sport, username, array, password):
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
+
 
 # Creates connection and cursor.
 # Queries the database to return all usernames.
@@ -133,7 +132,7 @@ def verify_new_username(username):
         db_name = 'olympick'
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
-        # print("Connected to DB: %s" % db_name)
+
 
         query = """
             SELECT  username
@@ -144,21 +143,25 @@ def verify_new_username(username):
 
         usernames = cur.fetchall()
         for database_username in usernames:
+            print("usernames in database",usernames)
+            print("current database username",database_username)
             database_username = str(list(database_username))
+            print("list modified",list(database_username))
+            print("string modi",database_username)
             if username in database_username:
-                print('Sorry that username already exists')
+                print('Sorry this username is already exist, please use another username')
                 quit()
             else:
                 pass
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Sorry we are not able to read data from olympic's database, please try again!")
 
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
+
 
     return username
 
@@ -172,7 +175,7 @@ def verify_existing_username(username):
         db_name = 'olympick'
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
-        # print("Connected to DB: %s" % db_name)
+
 
         query = """
             SELECT  username
@@ -186,19 +189,19 @@ def verify_existing_username(username):
             for database_username in usernames:
                 database_username = str(list(database_username))
                 if username in database_username:
-                    print("Username accepted")
+                    print("🎊This username has been verified successfully!🎊")
                     return
-            print("Username doesn't exist")
+            print("Sorry, this username doesn't exist, please make sure you are using the right username.")
             return False, quit()
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Sorry we are not able to read data from olympic's database, please try again!")
 
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
+
 
     return username
 
@@ -228,17 +231,17 @@ def verify_password(username, password):
             if password in database_password:
                 pass
             else:
-                print("Incorrect password")
+                print("Sorry the password is not correct, please try again!")
                 quit()
-        print("Password correct.")
+        print("✅ Password is correct.")
         cur.close()
 
     except Exception:
-        raise DbConnectionError("Failed to read data from DB")
+        raise DbConnectionError("Sorry we are not able to read data from olympic's database, please try again!")
 
     finally:
         if db_connection:
             db_connection.close()
-            # print("DB connection is closed")
+
 
     return password
