@@ -46,6 +46,7 @@ def get_entire_schedule(username):
         print(f"\n 🗓📆 Your current personalised olympick schedule 🗓📆: \n")
         if not schedule:
             schedule = 'Your schedule is empty'
+            print(schedule, "\n")
         else:
             for event in schedule:
                 event = list(event)
