@@ -1,0 +1,21 @@
+<doctype html>
+<title>Choose a Sport - Olympick</title>
+    <body>
+    <center>
+<p> Here are all of the sports in the Olympics: </p>
+{% for sport in sports %}
+    <br>🎖{{sport['name']}}🎖<br>
+{% endfor %}
+<form method="post" action="/show_sports">
+<dl>
+    <br>
+<p>Enter the name of the sport you would like to see all of the events for:</p>
+<input name="inputSportName" value="" type="text"
+            placeholder="Sport" autocomplete="off" required>
+</p>
+</dl>
+    <input type="submit" value="Submit">
+</form>
+            </center>
+</body>
+</doctype>
