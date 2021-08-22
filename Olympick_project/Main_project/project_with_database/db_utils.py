@@ -1,6 +1,7 @@
 import mysql.connector
 from config import USER, PASSWORD, HOST
 import bcrypt
+import all_functions
 
 
 # Initialise Exception
@@ -147,8 +148,8 @@ def verify_new_username(username):
         cur.execute(query)
         usernames = cur.fetchall()
         if usernames:
-            print('Sorry this username already exists, please use another username')
-            quit()
+            print('Sorry this username already exists, please use another username and try again!')
+            all_functions.username_and_password()
         else:
             pass
         cur.close()
@@ -187,8 +188,8 @@ def verify_existing_username(username):
         if usernames:
             print("Username accepted!")
         else:
-            print("Sorry, this username doesn't exist, please make sure you are using the right username.")
-            return False, quit()
+            print("Sorry, this username doesn't exist, please make sure you are using the right username and try again!")
+            all_functions.username_and_password()
         cur.close()
 
     except Exception:
@@ -227,7 +228,7 @@ def verify_password(username, user_password):
             pass
         else:
             print("Sorry the password is not correct, please try again!")
-            quit()
+            all_functions.username_and_password()
         print("✅ Password is correct.")
         cur.close()
 
