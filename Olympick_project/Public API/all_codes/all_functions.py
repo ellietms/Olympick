@@ -137,16 +137,26 @@ def choose_sport_display_events():
     print("🚩🚦 The names you can choose from are: 🚦 🚩 ")
     for sport in all_sports['result']:
         print("🎖", sport['name'], "🎖")
-    sport_name = input("For which sport you would like to know the schedules? ").title()
-    result = find_sport_id_by_name(sport_name)
-    print(f" 🏵🤺🤸🏻‍️🏆 All the schedules for {sport_name} : 🏆🤸🤺🏵‍")
-    generator2 = (res for res in result)
-    index = 0
-    for res in generator2:
-        index = index + 1
-        print("\n", index, res['event_name'], "\nBegins at: ", res['start_event'], "\nEnds at: ", res['end_event'],
+    sport_name = input("For which sport you would like to know the schedules? ")
+    if sport_name[0].isdigit:
+        pass
+    else:
+        sport_name = sport_name.title()
+    try:
+        result = find_sport_id_by_name(sport_name)
+        print(f" 🏵🤺🤸🏻‍️🏆 All the schedules for {sport_name} : 🏆🤸🤺🏵‍")
+        generator2 = (res for res in result)
+        index = 0
+        for res in generator2:
+            index = index + 1
+            print("\n", index, res['event_name'], "\nBegins at: ", res['start_event'], "\nEnds at: ", res['end_event'],
               "\n")
-    return sport_name, result
+        return sport_name, result
+    except KeyError:
+        print("Please try to enter the sport name again.")
+    except TypeError:
+        print("Please try to enter the sport name again.")
+
 
 
 # Function 2/4: add_events
