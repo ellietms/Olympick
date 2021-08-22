@@ -19,8 +19,8 @@ def format_data(nested_function):
             time_end = datetime.strptime(eachSport['end'], '%Y-%m-%d %H:%M:%S')
             uk_time_start = time_start - timedelta(hours=8)
             uk_time_end = time_end - timedelta(hours=8)
-            formatted_start_time = uk_time_start.strftime('%d %B %Y - %H:%M:%S')
-            formatted_end_time = uk_time_end.strftime('%d %B %Y - %H:%M:%S')
+            formatted_start_time = uk_time_start.strftime('%d %B %Y - %H:%M')
+            formatted_end_time = uk_time_end.strftime('%d %B %Y - %H:%M')
             new_data = {'event_name': event, 'start_event': formatted_start_time, 'end_event': formatted_end_time}
             all_data.insert(index, new_data)
         return all_data
@@ -87,7 +87,7 @@ def find_sport_id_by_name(sport_name):
     try:
         all_data = list_of_all_sports()
     except Exception:
-        print("Sorry, something went wrong!we are not able to retrieve list of events from the public olympic API. \n please try again.")
+        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
     else:
         for sport in all_data['result']:
             if sport['name'] == sport_name:
@@ -104,7 +104,7 @@ def endpoint_list_of_all_events(sport_id):
         list_of_events_data = response.json()
         return list_of_events_data
     except Exception:
-        print("Sorry, something went wrong!we are not able to retrieve list of sports events from the public olympic API. \n please try again.")
+        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")
 
 
 # Presents the entire schedule (get_entire_schedule, a function within db_utils) and then will either add_event or
@@ -129,6 +129,7 @@ def add_or_remove_events(username, password):
         add_or_remove_events(username, password)
 
 
+
 # "Add events" functionality
 # Function 1/4: choose_sport_display_events
 # Presents list of all sports. User can then choose a sport, which will be used to find the sport's ID by calling
@@ -144,16 +145,26 @@ def choose_sport_display_events():
     for sport in all_sports['result']:
         print(count,")",sport['name'], "🏆")
         count += 1
-    sport_name = input("🗓 Which sport you would like to add to your personalised olympick schedule? 🗓 \n Your answer for sport name: ").title()
-    result = find_sport_id_by_name(sport_name)
-    print(f"\n 📣📣📣📣 The list of all events for 🔻{sport_name}🔻: 📣📣📣📣")
-    generator2 = (res for res in result)
-    count_event = 1
-    for res in generator2:
-        print(count_event,")","Event name :",res['event_name'], "\nBegins at:",res['start_event'], "\nEnds at:", res['end_event'])
-        print("🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸")
-        count_event += 1
-    return sport_name, result
+    sport_name = input("🗓 Which sport you would like to add to your personalised olympick schedule? 🗓 \n Your answer for sport name: ")
+    if sport_name[0].isdigit:
+        sport_name = sport_name[:4] + sport_name[4].title() + sport_name[5:]
+    else:
+        sport_name = sport_name.title()
+    try:
+        result = find_sport_id_by_name(sport_name)
+        print(f"\n 📣📣📣📣 The list of all events for 🔻{sport_name}🔻: 📣📣📣📣")
+        generator2 = (res for res in result)
+        count_event = 1
+        for res in generator2:
+            print(count_event, ")", "Event name :", res['event_name'], "\nBegins at:", res['start_event'], "\nEnds at:",
+                  res['end_event'])
+            print("🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸")
+            count_event += 1
+        return sport_name, result
+    except KeyError:
+        print("Please try to enter the sport name again.")
+    except TypeError:
+        print("Please try to enter the sport name again.")
 
 
 # Function 2/4: add_events
