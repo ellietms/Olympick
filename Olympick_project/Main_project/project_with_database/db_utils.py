@@ -141,7 +141,8 @@ def verify_new_username(username):
         query = """
             SELECT  username
             FROM schedule
-            """
+            WHERE username = '{}'
+            """.format(username)
 
         cur.execute(query)
         usernames = cur.fetchall()
