@@ -53,7 +53,7 @@ def add_user():
 
 @app.route('/add_new_event', methods=['GET', 'POST'])
 def add_new_event_app():
-    all_sports = all_functions.endpoint_list_of_all_sports()
+    all_sports = all_functions.list_of_all_sports()
     all_sports['result']
     return render_template('show_sports.html', sports=all_sports['result'])
 
