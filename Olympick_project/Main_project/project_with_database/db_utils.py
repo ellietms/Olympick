@@ -42,12 +42,15 @@ def get_entire_schedule(username):
         schedule = cur.fetchall()
         event_number = 1
         print(f"\n 🗓📆 Your current personalised olympick schedule 🗓📆: \n")
-        for event in schedule:
-            event = list(event)
-            print("🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹")
-            print(event_number,")","Event name:",event[1], "(🔻{}🔻)".format(event[0]), "\nBegins at: ", event[2], "\nEnds at: ", event[3])
-            event_number += 1
-        cur.close()
+        if not schedule:
+            schedule = 'Your schedule is empty'
+        else:
+            for event in schedule:
+                event = list(event)
+                print("🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹🔷🔹")
+                print(event_number,")","Event name:",event[1], "(🔻{}🔻)".format(event[0]), "\nBegins at: ", event[2], "\nEnds at: ", event[3])
+                event_number += 1
+            cur.close()
 
     except Exception:
         raise DbConnectionError("Sorry, we are not able to read data from database, please try again!")

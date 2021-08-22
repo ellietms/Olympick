@@ -1,0 +1,8 @@
+<title>Your Schedule - Olympick</title>
+<p>Below is your current personalised Olympic schedule - feel free to add or remove events at the bottom of the page!</p>
+
+<p><b>Your schedule is currently empty.</b></p>
+
+<p> Would you like to add or remove any events? </p>
+<button type="button" onclick="window.location.href='{{ url_for( 'add_new_event_app' ) }}';">Add</button>
+<button type="button" onclick="window.location.href='{{ url_for( 'display_events_to_remove' ) }}';">Remove</button>
