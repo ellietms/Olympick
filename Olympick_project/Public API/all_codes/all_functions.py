@@ -47,29 +47,34 @@ def use_sport_id_to_return_list_of_events(nested_function):
 # you have the correct password.
 # The functions within this function are all in db_utils
 def username_and_password():
-    existing_user = input("Have you used our app before? Yes/no ").lower()
+    existing_user = input("Have you used our app before?(Yes/No) ").lower()
     if existing_user == 'no':
         username = input('Please choose a username: ')
         verify_new_username(username)
         password = input('Please choose a password: ')
-        print("Let's add some events to your personalised Olympick schedule!")
+        print("Congratulations🎊!You are now one of the members of our app.")
+        print("Your username is:",username)
+        print("Your password is:",password)
+        print("Now, Let's add some of your favourite sport's events to make your personalised olympick schedule!🎊")
+        return username, password
     elif existing_user == 'yes':
-        username = input('Please enter your username: ')
+        username = input('🎊It is great to see you again 🎊\nPlease enter your username to log in to the olympick app: ')
         verify_existing_username(username)
         password = input('Please enter your password: ')
         verify_password(username, password)
+        print("🔐 Authentication was successful!Thank you for using our app again! ")
         return username, password
     else:
-        raise ValueError("Please enter yes or no")
+        raise ValueError("Please enter Yes or No")
 
 
 # Calls endpoint 1 of the API, returns a list of all sports names (and other irrelevant details)
-def endpoint_list_of_all_sports():
+def list_of_all_sports():
     all_sports = 'https://olypi.com/sports/?call=GetAllSports'
     try:
         response = requests.get(all_sports)
     except Exception:
-        print("Unable to retrieve all sports")
+        print("Something went wrong, we are not able to retrieve all sports from the public olympic API")
     else:
         all_sports_data = response.json()
         return all_sports_data
@@ -80,9 +85,9 @@ def endpoint_list_of_all_sports():
 @use_sport_id_to_return_list_of_events
 def find_sport_id_by_name(sport_name):
     try:
-        all_data = endpoint_list_of_all_sports()
+        all_data = list_of_all_sports()
     except Exception:
-        print("Failed to retrieve endpoints for list of sports")
+        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
     else:
         for sport in all_data['result']:
             if sport['name'] == sport_name:
@@ -99,16 +104,15 @@ def endpoint_list_of_all_events(sport_id):
         list_of_events_data = response.json()
         return list_of_events_data
     except Exception:
-        print("Failed to retrieve list of sports events")
+        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")
 
 
 # Presents the entire schedule (get_entire_schedule, a function within db_utils) and then will either add_event or
 # remove_event. The steps that follow either "add event" or "remove event" are discussed in further comments.
 
 def add_or_remove_events(username, password):
-    print("Here is your current schedule: \n")
     result = get_entire_schedule(username)
-    operator = input("Would you like to:\n1. Add more events? \n2. Remove some events? \n3. Quit? ")
+    operator = input("Would you like to:\n1. Add more events? \n2. Remove some events? \n3. Quit? \nYour answer: ")
     if operator == '1':
         sport_name, result = choose_sport_display_events()
         add_events(sport_name, result, username, password)
@@ -118,16 +122,13 @@ def add_or_remove_events(username, password):
         remove_event_from_database(username, array_remove)
         add_or_remove_events(username, password)
     elif operator == '3':
-        print("Thanks for using Olympick! Bye!")
+        print("\n💬 Thank you for using the olympick app for your ✨ personalised olympick schedule ✨!\n🤔 if you are curious about what API we are using, please find it here : https://olypi.com/\n💡 Our github for this project: https://github.com/ellietms/Olympick💡️\n❤️ We hope to see you soon again!\n 💻 Happy Coding! 💻 ")
         quit()
-<<<<<<< HEAD
-    return sport_name, result, array_remove
-=======
     else:
         print("\n***** Please enter a choice between 1, 2 or 3 *****\n")
         add_or_remove_events(username, password)
 
->>>>>>> 1fd4a3710afe8fa2059b322a37a1c561192b23d7
+
 
 # "Add events" functionality
 # Function 1/4: choose_sport_display_events
@@ -137,19 +138,22 @@ def add_or_remove_events(username, password):
 # This function returns the name of the sport entered, and the list of events for that sport.
 
 def choose_sport_display_events():
-    all_sports = endpoint_list_of_all_sports()
-    print("🚩🚦 The names you can choose from are: 🚦 🚩 ")
+    all_sports = list_of_all_sports()
+    print("⚠️⚠️You can just choose between these names⚠️⚠️️")
+    print("The olympic's sport names:")
+    count = 1
     for sport in all_sports['result']:
-        print("🎖", sport['name'], "🎖")
-    sport_name = input("For which sport you would like to know the schedules? ").title()
+        print(count,")",sport['name'], "🏆")
+        count += 1
+    sport_name = input("🗓 Which sport you would like to add to your personalised olympick schedule? 🗓 \n Your answer for sport name: ").title()
     result = find_sport_id_by_name(sport_name)
-    print(f" 🏵🤺🤸🏻‍️🏆 All the schedules for {sport_name} : 🏆🤸🤺🏵‍")
+    print(f"\n 📣📣📣📣 The list of all events for 🔻{sport_name}🔻: 📣📣📣📣")
     generator2 = (res for res in result)
-    index = 0
+    count_event = 1
     for res in generator2:
-        index = index + 1
-        print("\n", index, res['event_name'], "\nBegins at: ", res['start_event'], "\nEnds at: ", res['end_event'],
-              "\n")
+        print(count_event,")","Event name :",res['event_name'], "\nBegins at:",res['start_event'], "\nEnds at:", res['end_event'])
+        print("🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸🔶🔸")
+        count_event += 1
     return sport_name, result
 
 
@@ -157,7 +161,7 @@ def choose_sport_display_events():
 # This function uses the sport's event schedule returned in the last function to call the next one (see explanation
 # below).
 def add_events(sport_name, result, username, password):
-    array = add_specific_event(result)
+    array = add_specific_event(result,sport_name)
     add_event_to_database(sport_name, username, array, password)  # inside db_utils
 
 
@@ -165,9 +169,10 @@ def add_events(sport_name, result, username, password):
 # This function will use the entire list of that sport's events (the 'result') and use zero indexing (as the function
 # before presented the events as numbered) to find that event within the list of all the sports' events, and then
 # add it to an array.
-def add_specific_event(result):
+def add_specific_event(result,sport_name):
     add_to_database = []
-    inputted_string = input("Choose the number of the event(s) you would like to add to your schedule! ")
+    print(f"➕ Now, Let's add your favourite event(s) for 🔻{sport_name}🔻 to make your personalised olympick schedule!🎊 ➕")
+    inputted_string = input("Choose the number of the event(s) from the above list that you would like to add to your schedule\n ⚠️️️ it should have spaces between the numbers you choose!(for example:1 3 20)\n Your answer: ")
     split_string = inputted_string.split()
     map_events_to_add = map(int, split_string)
     for event in map_events_to_add:
@@ -187,8 +192,8 @@ def add_specific_event(result):
 # by the user, to index the event within the schedule and creates a list from the details of each event chosen to be
 # removed.
 def remove_event(result):
-
-    inputted_string = input("Choose the number(s) of the event(s) you would like to remove from your schedule! ")
+    print("❌ Sure, Let's remove some extra events from your personalised olympick schedule!❌")
+    inputted_string = input("Choose the number of the event(s) from the above list that you would like to remove from your schedule\n ⚠️️️ it should have spaces between the numbers you choose!(for example:1 3 20)\n Your answer: ")
     remove_from_database = []
     split_string = inputted_string.split()
     map_events_to_remove = map(int, split_string)
