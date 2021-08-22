@@ -33,7 +33,13 @@ def show_schedule():
     username = session.get('username')
     schedule = db_utils.get_entire_schedule(username)
     session['schedule'] = schedule
-    return render_template("schedule.html", data=schedule)
+    schedule = db_utils.get_entire_schedule(username)
+    index = 0
+    list_of_events = []
+    for res in schedule:
+        index = index + 1
+        list_of_events.append([str(index), res[0], res[1], res[2]])
+    return render_template("schedule.html", data=list_of_events)
 
 @app.route('/new_user')
 def add_user_view():
@@ -51,11 +57,16 @@ def add_user():
     except Exception as e:
         print(e)
 
+
 @app.route('/add_new_event', methods=['GET', 'POST'])
 def add_new_event_app():
     all_sports = all_functions.list_of_all_sports()
-    all_sports['result']
-    return render_template('show_sports.html', sports=all_sports['result'])
+    sports_and_their_numbers = []
+    index = 1
+    for sport in all_sports['result']:
+        sports_and_their_numbers.append([index, sport['name']])
+        index += 1
+    return render_template('show_sports.html', data=sports_and_their_numbers)
 
 
 @app.route('/show_sports', methods=['GET', 'POST'])
@@ -97,7 +108,7 @@ def display_events_to_remove():
     list_of_events = []
     for res in schedule:
         index = index + 1
-        list_of_events.append([str(index), res[0], res[ 1],  res[2]])
+        list_of_events.append([str(index), res[0], res[1],  res[2]])
     return render_template('show_events_to_remove.html', data=list_of_events)
 
 @app.route('/remove_events', methods=['GET', 'POST'])

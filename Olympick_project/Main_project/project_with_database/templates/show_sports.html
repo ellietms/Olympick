@@ -3,9 +3,16 @@
     <body>
     <center>
 <p> Here are all of the sports in the Olympics: </p>
-{% for sport in sports %}
-    <br>🎖{{sport['name']}}🎖<br>
-{% endfor %}
+        <table border="1" cellpadding="5" cellspacing="5">
+    {% for row in data %}
+        <tr>
+        {% for d in row %}
+            <td>{{ d }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
 <form method="post" action="/show_sports">
 <dl>
     <br>
