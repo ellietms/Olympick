@@ -144,15 +144,12 @@ def verify_new_username(username):
             """
 
         cur.execute(query)
-
         usernames = cur.fetchall()
-        for database_username in usernames:
-            database_username = str(list(database_username))
-            if username in database_username:
-                print('Sorry this username is already exist, please use another username')
-                quit()
-            else:
-                pass
+        if usernames:
+            print('Sorry this username already exists, please use another username')
+            quit()
+        else:
+            pass
         cur.close()
 
     except Exception:
@@ -178,19 +175,17 @@ def verify_existing_username(username):
 
 
         query = """
-            SELECT  username
+            SELECT  *
             FROM schedule
-            """
+            WHERE username = '{}'
+            """.format(username)
 
         cur.execute(query)
 
         usernames = cur.fetchall()
-        while True:
-            for database_username in usernames:
-                database_username = str(list(database_username))
-                if username in database_username:
-                    print("🎊This username has been verified successfully!🎊")
-                    return
+        if usernames:
+            print("Username accepted!")
+        else:
             print("Sorry, this username doesn't exist, please make sure you are using the right username.")
             return False, quit()
         cur.close()
@@ -226,8 +221,8 @@ def verify_password(username, user_password):
         cur.execute(query)
 
         actual_password = cur.fetchall()
-        x = str(actual_password[0])
-        if bcrypt.checkpw(user_password.encode(), x[2:-3].encode()):
+        string_database_password = str(actual_password[0])
+        if bcrypt.checkpw(user_password.encode(), string_database_password[2:-3].encode()):
             pass
         else:
             print("Sorry the password is not correct, please try again!")
