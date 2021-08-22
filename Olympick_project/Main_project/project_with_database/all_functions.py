@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timedelta
 from db_utils import verify_password, verify_existing_username, verify_new_username, remove_event_from_database, \
     get_entire_schedule, add_event_to_database
+import bcrypt
 
 
 # DECORATORS
@@ -51,19 +52,23 @@ def username_and_password():
     if existing_user == 'no':
         username = input('Please choose a username: ')
         verify_new_username(username)
-        password = input('Please choose a password: ')
+        user_password = input('Please choose a password: ')
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(user_password.encode(), salt)
         print("Congratulations🎊!You are now one of the members of our app.")
-        print("Your username is:",username)
-        print("Your password is:",password)
+        print("Your username is:", username)
+        print("Your password is:", user_password)
         print("Now, Let's add some of your favourite sport's events to make your personalised olympick schedule!🎊")
-        return username, password
+        return username, hashed_password
     elif existing_user == 'yes':
         username = input('🎊It is great to see you again 🎊\nPlease enter your username to log in to the olympick app: ')
         verify_existing_username(username)
-        password = input('Please enter your password: ')
-        verify_password(username, password)
+        user_password = input('Please enter your password: ')
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(user_password.encode(), salt)
+        verify_password(username, user_password)
         print("🔐 Authentication was successful!Thank you for using our app again! ")
-        return username, password
+        return username, hashed_password
     else:
         raise ValueError("Please enter Yes or No")
 
@@ -110,23 +115,23 @@ def endpoint_list_of_all_events(sport_id):
 # Presents the entire schedule (get_entire_schedule, a function within db_utils) and then will either add_event or
 # remove_event. The steps that follow either "add event" or "remove event" are discussed in further comments.
 
-def add_or_remove_events(username, password):
+def add_or_remove_events(username, hashed_password):
     result = get_entire_schedule(username)
     operator = input("Would you like to:\n1. Add more events? \n2. Remove some events? \n3. Quit? \nYour answer: ")
     if operator == '1':
         sport_name, result = choose_sport_display_events()
-        add_events(sport_name, result, username, password)
-        add_or_remove_events(username, password)
+        add_events(sport_name, result, username, hashed_password)
+        add_or_remove_events(username, hashed_password)
     elif operator == '2':
         array_remove = remove_event(result)
         remove_event_from_database(username, array_remove)
-        add_or_remove_events(username, password)
+        add_or_remove_events(username, hashed_password)
     elif operator == '3':
         print("\n💬 Thank you for using the olympick app for your ✨ personalised olympick schedule ✨!\n🤔 if you are curious about what API we are using, please find it here : https://olypi.com/\n💡 Our github for this project: https://github.com/ellietms/Olympick💡️\n❤️ We hope to see you soon again!\n 💻 Happy Coding! 💻 ")
         quit()
     else:
         print("\n***** Please enter a choice between 1, 2 or 3 *****\n")
-        add_or_remove_events(username, password)
+        add_or_remove_events(username, hashed_password)
 
 
 
@@ -170,9 +175,9 @@ def choose_sport_display_events():
 # Function 2/4: add_events
 # This function uses the sport's event schedule returned in the last function to call the next one (see explanation
 # below).
-def add_events(sport_name, result, username, password):
-    array = add_specific_event(result,sport_name)
-    add_event_to_database(sport_name, username, array, password)  # inside db_utils
+def add_events(sport_name, result, username, hashed_password):
+    array = add_specific_event(result, sport_name)
+    add_event_to_database(sport_name, username, array, hashed_password)  # inside db_utils
 
 
 # Function 3/4: add_specific_event

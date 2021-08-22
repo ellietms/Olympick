@@ -1,5 +1,6 @@
 import mysql.connector
 from config import USER, PASSWORD, HOST
+import bcrypt
 
 
 # Initialise Exception
@@ -209,7 +210,7 @@ def verify_existing_username(username):
 # Queries the database to return the password of the user with the inputted username.
 # Password(s) (as they are saved in multiple records within the database) are iterated through, to see if the inputted
 # password matches.
-def verify_password(username, password):
+def verify_password(username, user_password):
     try:
         db_name = 'olympick'
         db_connection = _connect_to_db(db_name) # create database connection from sqlconnector module
@@ -225,13 +226,12 @@ def verify_password(username, password):
         cur.execute(query)
 
         actual_password = cur.fetchall()
-        for database_password in actual_password:
-            database_password = str(list(database_password))
-            if password in database_password:
-                pass
-            else:
-                print("Sorry the password is not correct, please try again!")
-                quit()
+        x = str(actual_password[0])
+        if bcrypt.checkpw(user_password.encode(), x[2:-3].encode()):
+            pass
+        else:
+            print("Sorry the password is not correct, please try again!")
+            quit()
         print("✅ Password is correct.")
         cur.close()
 
@@ -243,4 +243,4 @@ def verify_password(username, password):
             db_connection.close()
 
 
-    return password
+    return user_password
