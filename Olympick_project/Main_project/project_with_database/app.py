@@ -36,9 +36,13 @@ def show_schedule():
     schedule = db_utils.get_entire_schedule(username)
     index = 0
     list_of_events = []
-    for res in schedule:
-        index = index + 1
-        list_of_events.append([str(index), res[0], res[1], res[2]])
+    if schedule == 'Your schedule is empty':
+        return render_template('schedule_empty.html')
+    else:
+        print(schedule)
+        for res in schedule:
+            index = index + 1
+            list_of_events.append([str(index), res[0], res[1], res[2]])
     return render_template("schedule.html", data=list_of_events)
 
 @app.route('/new_user')
@@ -98,7 +102,16 @@ def events_added():
     password = session.get('password')
     db_utils.add_event_to_database(sport_name, username, add_to_database, password)
     schedule = db_utils.get_entire_schedule(username)
-    return render_template("schedule.html", data=schedule)
+    index = 0
+    list_of_events = []
+    if schedule == 'Your schedule is empty':
+        return render_template('schedule_empty.html')
+    else:
+        print(schedule)
+        for res in schedule:
+            index = index + 1
+            list_of_events.append([str(index), res[0], res[1], res[2]])
+    return render_template("schedule.html", data=list_of_events)
 
 @app.route('/display_events_to_remove', methods=['GET', 'POST'])
 def display_events_to_remove():
