@@ -1,0 +1,28 @@
+<doctype html>
+<title> Events in your Schedule - Olympick</title>
+    <p> Below is a list of all the events you have in your schedule. Each event is numbered, and at the bottom of the page you
+    can enter the number of the event(s) you'd like to remove!</p>
+    <body>
+    <center>
+<table border="1" cellpadding="5" cellspacing="5">
+    {% for row in data %}
+        <tr>
+        {% for d in row %}
+            <td>{{ d }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+<form method="post" action="/remove_events">
+<dl>
+    <br>
+<p>Enter the numbers of the events you'd like to remove from your schedule, separated by a space - e.g. 1 5 32:</p>
+<input name="inputEventNumbers" value="" type="text"
+            placeholder="Event numbers" autocomplete="off" required>
+</p>
+</dl>
+    <input type="submit" value="Submit">
+</form>
+            </center>
+</body>
+</doctype>
