@@ -1,0 +1,30 @@
+<doctype html>
+<title>Login - Olympick</title>
+<h2>Login</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <form method="post" action="/login">
+<dl>
+<p>
+<input name="inputUserName" value="" type="text"
+            placeholder="Name" autocomplete="off" required>
+</p>
+<p>
+</p>
+<p>
+<input name="inputPassword" value="" type="password"
+            placeholder="Password" autocomplete="off" required>
+</p>
+</dl>
+<p>
+<input type="submit" value="Submit">
+</p>
+</form>
