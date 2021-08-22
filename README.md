@@ -1,23 +1,29 @@
 
 # 🇨🇦 🇬🇹 🇰🇷 🇱🇧 🇯🇵 Olympick 🏴󠁧󠁢󠁷󠁬󠁳󠁿 🇵🇰 🇮🇷 🇬🇧 🇨🇴 
 
-Currently there is no way to create a viewing schedule for the Olympics that only include specific sports. 
+Currently there is no way to create a viewing schedule for the Olympics that only include specific sports. Olympick aims to solve this problem by helping people create their own personalised schedule for watching events of their favourite sports in UK time. Events already watched or no longer of interest can then be removed from schedules and/or new events can be added.
 
-Olympick aims to address this! 
+Olympick runs in the terminal and in the browser. Please see installation instructions below.
+<br>
 
-This app allows a user to : <br>
- <li>Register or log in.</li><br>
- <li>Input their favourite sports and receive a schedule of all the events happening for those sports.</li><br/>
- <li>Save chosen events to their personalised schedule.</li>
+<br>
+
+Our app allows a user to : <br>
+ <li>Register or log in.</li>
+ <li>Input their favourite sports and receive a schedule of all the events happening for those sports.</li>
+ <li>Save favourite events of specific sports to a personalised schedule in UK time.</li>
+ <li>Remove events from their schedule if they are no longer interested in them.</li>
 <br>
 
 
 ## Tools
 
-<li> Python language </li>
+<li> Python </li>
 <li> 2020 Olympics Public API : (https://olypi.com/)</li>
+<li> Flask for creating our API</li>
+<li> HTML5 to display schedules on the frontend </li>
 <li> SQL database </li>
-<li> Python Libraries : <strong>Flask</strong>, <strong>Collections</strong>, etc. </li>
+<li> MySQL Connector to connect to our database with Python </li>
 <li> Tests : Unit tests and mock tests </li>
 <br>
 
@@ -30,7 +36,9 @@ https://github.com/ellietms/Olympick
 ```
 <br>
 
-2. Run in your IDE of choice!
+2. Run in your IDE of choice!<br>
+Run `main.py` for our app in the terminal
+or `app.py` for our app in the browser
 <br>
 
 
@@ -39,7 +47,6 @@ https://github.com/ellietms/Olympick
 ![Demo](https://user-images.githubusercontent.com/81711732/130333703-8eb2007e-c7cf-4f57-94a1-45630c3cef38.gif)
 
 <br>
-
 
 
 ## Contributing
@@ -54,5 +61,6 @@ Please make sure to update tests as appropriate.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
 <br>
 
