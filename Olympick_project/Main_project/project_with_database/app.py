@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session
 import all_functions
 import db_utils
+import bcrypt
 
 
 app = Flask(__name__)
@@ -24,6 +25,9 @@ def existing_user():
         db_utils.verify_password(username, password)
         session['username'] = username
         session['password'] = password
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password.encode(), salt)
+        session['hashed_password'] = hashed_password
         return render_template('choose_to_view_schedule.html')
     except:
         return render_template('incorrect_username_or_password.html')
@@ -39,7 +43,6 @@ def show_schedule():
     if schedule == 'Your schedule is empty':
         return render_template('schedule_empty.html')
     else:
-        print(schedule)
         for res in schedule:
             index = index + 1
             list_of_events.append([str(index), res[0], res[1], res[2]])
@@ -54,8 +57,11 @@ def add_user():
     try:
         username = request.form['inputUserName']
         password = request.form['inputPassword']
-        db_utils.verify_new_username(username)
         session['username'] = username
+        db_utils.verify_new_username(username)
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password.encode(), salt)
+        session['hashed_password'] = hashed_password
         session['password'] = password
         return render_template('choose_to_view_schedule.html')
     except Exception as e:
@@ -88,6 +94,7 @@ def display_events():
 
 @app.route('/show_events', methods=['GET', 'POST'])
 def events_added():
+    hashed_password = session.get('hashed_password')
     sport_name = session.get('sport_name')
     input_app = request.form['inputEventNumbers']
     result = session.get('result')
@@ -99,8 +106,7 @@ def events_added():
         event_to_add = result[index]
         add_to_database.append(event_to_add)
     username = session.get('username')
-    password = session.get('password')
-    db_utils.add_event_to_database(sport_name, username, add_to_database, password)
+    db_utils.add_event_to_database(sport_name, username, add_to_database, hashed_password)
     schedule = db_utils.get_entire_schedule(username)
     index = 0
     list_of_events = []
