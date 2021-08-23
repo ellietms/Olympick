@@ -146,11 +146,11 @@ def choose_sport_display_events():
         print(count,")",sport['name'], "🏆")
         count += 1
     sport_name = input("🗓 Which sport you would like to add to your personalised olympick schedule? 🗓 \n Your answer for sport name: ")
-    if sport_name[0].isdigit:
-        sport_name = sport_name[:4] + sport_name[4].title() + sport_name[5:]
-    else:
-        sport_name = sport_name.title()
     try:
+        if '3x3' in sport_name:
+            sport_name = sport_name[:4] + sport_name[4].title() + sport_name[5:]
+        else:
+            sport_name = sport_name.title()
         result = find_sport_id_by_name(sport_name)
         print(f"\n 📣📣📣📣 The list of all events for 🔻{sport_name}🔻: 📣📣📣📣")
         generator2 = (res for res in result)
@@ -165,6 +165,7 @@ def choose_sport_display_events():
         print("Please try to enter the sport name again.")
     except TypeError:
         print("Please try to enter the sport name again.")
+
 
 
 # Function 2/4: add_events
