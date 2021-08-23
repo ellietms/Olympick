@@ -1,8 +1,20 @@
 import requests
 from datetime import datetime, timedelta
+from pprint import pprint
 from db_utils import verify_password, verify_existing_username, verify_new_username, remove_event_from_database, \
     get_entire_schedule, add_event_to_database
 
+
+
+def list_of_all_sports():
+    all_sports = 'https://olypi.com/sports/?call=GetAllSports'
+    try:
+        response = requests.get(all_sports)
+    except Exception:
+        print("Something went wrong, we are not able to retrieve all sports from the public olympic API")
+    else:
+        all_sports_data = response.json()
+        return all_sports_data
 
 # DECORATORS
 
@@ -12,7 +24,7 @@ def format_data(nested_function):
         all_data = []
         data = nested_function(*args)
         index = 0
-        for eachSport in data['result']:
+        for eachSport in data["result"]:
             index += 1
             event = eachSport['event']
             time_start = datetime.strptime(eachSport['start'], '%Y-%m-%d %H:%M:%S')
@@ -27,6 +39,18 @@ def format_data(nested_function):
 
     return inner_wrapper
 
+# (This function is part of the decorator used in the above function) Calls endpoint 2 of the API, returns a list of
+# all events within that sport and their schedules, which have been formatted to UK time by the decorator.
+@format_data
+def endpoint_list_of_all_events(sport_id):
+    try:
+        list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
+        response = requests.get(list_of_events)
+        list_of_events_data = response.json()
+        return list_of_events_data
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")
+
 
 # Uses the sport_id to call endpoint 2 of the API and return a list of all events and schedules for that sport.
 def use_sport_id_to_return_list_of_events(nested_function):
@@ -37,9 +61,22 @@ def use_sport_id_to_return_list_of_events(nested_function):
 
     return inner_wrapper
 
+# Uses the inputted sport name to find the sport's ID for the API (find_sport_id_by_name) - then the decorator
+# uses this ID to call the API's second endpoint, to finally return a list of events within that sport.
+@use_sport_id_to_return_list_of_events
+def find_sport_id_by_name(sport_name):
+    try:
+        all_data = list_of_all_sports()
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
+    else:
+        for sport in all_data['result']:
+            if sport['name'] == sport_name:
+                return sport['id']
+
+
 
 # FUNCTIONS (chronological order)
-
 # Verifies that:
 # If you are creating a new username, it does not already exist
 # or
@@ -68,48 +105,16 @@ def username_and_password():
         raise ValueError("Please enter Yes or No")
 
 
-# Calls endpoint 1 of the API, returns a list of all sports names (and other irrelevant details)
-def list_of_all_sports():
-    all_sports = 'https://olypi.com/sports/?call=GetAllSports'
-    try:
-        response = requests.get(all_sports)
-    except Exception:
-        print("Something went wrong, we are not able to retrieve all sports from the public olympic API")
-    else:
-        all_sports_data = response.json()
-        return all_sports_data
 
-
-# Uses the inputted sport name to find the sport's ID for the API (find_sport_id_by_name) - then the decorator
-# uses this ID to call the API's second endpoint, to finally return a list of events within that sport.
-@use_sport_id_to_return_list_of_events
-def find_sport_id_by_name(sport_name):
-    try:
-        all_data = list_of_all_sports()
-    except Exception:
-        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
-    else:
-        for sport in all_data['result']:
-            if sport['name'] == sport_name:
-                return sport['id']
-
-
-# (This function is part of the decorator used in the above function) Calls endpoint 2 of the API, returns a list of
-# all events within that sport and their schedules, which have been formatted to UK time by the decorator.
-@format_data
-def endpoint_list_of_all_events(sport_id):
-    try:
-        list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
-        response = requests.get(list_of_events)
-        list_of_events_data = response.json()
-        return list_of_events_data
-    except Exception:
-        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")
+# This function uses the sport's event schedule returned in the last function to call the next one (see explanation
+# below).
+def add_events(sport_name, result, username, password):
+    array = add_specific_event(result,sport_name)
+    add_event_to_database(sport_name, username, array, password)  # inside db_utils
 
 
 # Presents the entire schedule (get_entire_schedule, a function within db_utils) and then will either add_event or
 # remove_event. The steps that follow either "add event" or "remove event" are discussed in further comments.
-
 def add_or_remove_events(username, password):
     result = get_entire_schedule(username)
     operator = input("Would you like to:\n1. Add more events? \n2. Remove some events? \n3. Quit? \nYour answer: ")
@@ -127,7 +132,6 @@ def add_or_remove_events(username, password):
     else:
         print("\n***** Please enter a choice between 1, 2 or 3 *****\n")
         add_or_remove_events(username, password)
-
 
 
 # "Add events" functionality
@@ -167,15 +171,7 @@ def choose_sport_display_events():
         print("Please try to enter the sport name again.")
 
 
-# Function 2/4: add_events
-# This function uses the sport's event schedule returned in the last function to call the next one (see explanation
-# below).
-def add_events(sport_name, result, username, password):
-    array = add_specific_event(result,sport_name)
-    add_event_to_database(sport_name, username, array, password)  # inside db_utils
-
-
-# Function 3/4: add_specific_event
+# Function 2/4: add_specific_event
 # This function will use the entire list of that sport's events (the 'result') and use zero indexing (as the function
 # before presented the events as numbered) to find that event within the list of all the sports' events, and then
 # add it to an array.
@@ -216,3 +212,31 @@ def remove_event(result):
 # The second (2/2) "remove events" function - remove_event_from_database - is in the db_utils file. It uses the array
 # returned in the last function, and removes all of the events individually from that user's schedule within the
 # database. Further explanation is provided in the db_utils file.
+
+
+
+# Functions for tests
+
+# Calls endpoint 1 of the API, returns a list of all sports names (and other irrelevant details)
+
+
+def find_sport_id_with_name(sport_name):
+    try:
+        all_data = list_of_all_sports()
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
+    else:
+        for sport in all_data['result']:
+            if sport['name'] == sport_name:
+                return sport['id']
+
+
+
+def list_of_all_events(sport_id):
+    try:
+        list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
+        response = requests.get(list_of_events)
+        list_of_events_data = response.json()
+        return list_of_events_data
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")

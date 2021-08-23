@@ -1,5 +1,5 @@
-HOST = "localhost"
+HOST = "127.0.0.1"
 USER = "root"
-PASSWORD = "Shenanigans1"
+PASSWORD = "EllieSql92"
 
 
