@@ -220,4 +220,25 @@ def remove_event(result):
 
 # The second (2/2) "remove events" function - remove_event_from_database - is in the db_utils file. It uses the array
 # returned in the last function, and removes all of the events individually from that user's schedule within the
-# database. Further explanation is provided in the db_utils file.
+
+def find_sport_id_with_name(sport_name):
+    try:
+        all_data = list_of_all_sports()
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API. \n Please try again.")
+    else:
+        for sport in all_data['result']:
+            if sport['name'] == sport_name:
+                return sport['id']
+
+
+
+def list_of_all_events(sport_id):
+    try:
+        list_of_events = 'https://olypi.com/schedule/?call=SportEvents&id={}'.format(sport_id)
+        response = requests.get(list_of_events)
+        list_of_events_data = response.json()
+        return list_of_events_data
+    except Exception:
+        print("Sorry, something went wrong! We are not able to retrieve list of sports events from the public olympic API. \n please try again.")
+
