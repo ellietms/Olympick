@@ -144,7 +144,12 @@ def events_removed():
         remove_from_database.append(event_to_remove)
     db_utils.remove_event_from_database(username, remove_from_database)
     schedule = db_utils.get_entire_schedule(username)
-    return render_template("schedule.html", data=schedule)
+    index = 0
+    list_of_events = []
+    for res in schedule:
+        index = index + 1
+        list_of_events.append([str(index), res[0], res[1], res[2]])
+    return render_template("schedule.html", data=list_of_events)
 
 
 if __name__ == '__main__':
