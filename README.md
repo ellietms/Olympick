@@ -1,6 +1,6 @@
 # 🇨🇦 🇬🇹 🇰🇷 🇱🇧 🇯🇵 Olympick 🏴󠁧󠁢󠁷󠁬󠁳󠁿 🇵🇰 🇮🇷 🇬🇧 🇨🇴 
 
-Currently there is no way to create a viewing schedule for the Olympics that only include specific sports. Olympick aims to solve this problem by helping people create their own personalised schedule for watching events of their favourite sports in UK time. Events already watched or no longer of interest can then be removed from schedules and/or new events can be added. A user is able to interract with the app either in the terminal, by running `main.py`, or in the browser by running `app.py`.
+Currently there is no way to create a viewing schedule for the Olympics that only include specific sports. our Olympick app aims to solve this problem by helping people create their own personalised schedule for watching events of their favourite sports in UK time. Events already watched or no longer of interest can then be removed from schedules and/or new events can be added. A user is able to interract with the app either in the terminal, by running `main.py`, or in the browser by running `app.py`.
 
 The project was inspired by this tweet, which one of us found:<br><br>
 ![tweet](https://user-images.githubusercontent.com/81711732/130365472-5c336d54-1044-4ade-8d86-85eb292be14d.jpeg)
