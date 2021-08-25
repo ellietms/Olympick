@@ -23,7 +23,7 @@ Our app allows a user to : <br>
 <li> 2020 Olympics Public API : (https://olypi.com/)</li>
 <li> HTML5 to display schedules on the frontend </li>
 <li> Flask for creating our API</li>
-<li> bcrypt for hashing<li>
+<li> bcrypt for hashing</li>
 <li> SQL database </li>
 <li> MySQL Connector to connect to our database with Python</li>
 <li> Datetime library</li>
