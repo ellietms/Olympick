@@ -225,9 +225,9 @@ def remove_event(result):
 # The second (2/2) "remove events" function - remove_event_from_database - is in the db_utils file. It uses the array
 # returned in the last function, and removes all of the events individually from that user's schedule within the
 # database. Further explanation is provided in the db_utils file.
-
 # Functions for tests:
 # Decorators removed for ease of testing:
+
 def find_sport_id_with_name(sport_name):
     try:
         all_data = list_of_all_sports()

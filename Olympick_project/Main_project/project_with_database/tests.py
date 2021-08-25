@@ -66,6 +66,7 @@ class TestFindSportIdWithName(TestCase):
 
 
 
+
 class TestGetListOfAllSpecificSportEvents(TestCase):
     @patch('use_functions_for_tests.list_of_all_events')
     def test_find_list_of_all_specific_sport_events_by_specific_id(self, mock_data):
@@ -111,6 +112,7 @@ class TestGetListOfAllSpecificSportEvents(TestCase):
 
 
 # Test of the complicated decorators( a decoratore which includes another decoratore inside of it)
+
 class TestGetSportEventsByName(TestCase):
     @patch('use_functions_for_tests.find_sport_id_by_name')
     def test_find_sport_id_by_name(self, mock_data):
@@ -147,5 +149,7 @@ class TestGetSportEventsByName(TestCase):
             self.assertRaises(Exception, find_sport_id_with_name, "Sorry, something went wrong! We are not able to retrieve the list of events from the public olympic API.")
 
 
+
 if __name__ == "__main__":
     main()
+
