@@ -11,20 +11,20 @@ Our app allows a user to : <br>
  <li>Input their favourite sports and receive a schedule of all the events happening for those sports.</li>
  <li>Save favourite events of specific sports to a personalised schedule in UK time.</li>
  <li>Remove events from their schedule if they are no longer interested in them.</li>
- <li>Choose between running 
+ <li>Choose between running the app in terminal or browser
  <br>
  <br>
 
 
 ## Tools
 
-<li> Python </li>
+<li> Python programming language </li>
 <li> 2020 Olympics Public API : (https://olypi.com/)</li>
 <li> Flask for creating our API</li>
-<li> HTML5 to display schedules on the frontend </li>
 <li> SQL database </li>
 <li> MySQL Connector to connect to our database with Python </li>
-<li> Tests : Unit tests and mock tests </li>
+<li> HTML5 to display schedules on the frontend </li>
+<li> Unit tests by mock and patch </li>
 
 <br>
 
