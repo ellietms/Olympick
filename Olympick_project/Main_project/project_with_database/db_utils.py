@@ -150,7 +150,7 @@ def verify_new_username(username):
         usernames = cur.fetchall()
         if usernames:
             print('Sorry this username already exists, please use another username and try again!')
-            all_functions.username_and_password()
+            quit()
         else:
             pass
         cur.close()
@@ -190,7 +190,7 @@ def verify_existing_username(username):
             print("Username accepted!")
         else:
             print("Sorry, this username doesn't exist, please make sure you are using the right username and try again!")
-            all_functions.username_and_password()
+            quit()
         cur.close()
 
     except Exception:
