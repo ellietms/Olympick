@@ -54,18 +54,18 @@ def add_user_view():
 
 @app.route('/add_new_user', methods=['POST'])
 def add_user():
-    try:
-        username = request.form['inputUserName']
-        password = request.form['inputPassword']
-        session['username'] = username
-        db_utils.verify_new_username(username)
+    username = request.form['inputUserName']
+    password = request.form['inputPassword']
+    session['username'] = username
+    if not db_utils.verify_new_username(username):
+        return render_template('username_already_exists.html')
+    else:
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode(), salt)
         session['hashed_password'] = hashed_password
         session['password'] = password
         return render_template('choose_to_view_schedule.html')
-    except Exception as e:
-        print(e)
+
 
 
 @app.route('/add_new_event', methods=['GET', 'POST'])
