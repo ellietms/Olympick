@@ -229,7 +229,7 @@ def verify_password(username, user_password):
             pass
         else:
             print("Sorry the password is not correct, please try again!")
-            all_functions.username_and_password()
+            quit()
         print("✅ Password is correct.")
         cur.close()
 
