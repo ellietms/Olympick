@@ -51,24 +51,28 @@ def username_and_password():
     existing_user = input("Have you used our app before?(Yes/No) ").lower()
     if existing_user == 'no':
         username = input('Please choose a username: ')
-        verify_new_username(username)
-        user_password = input('Please choose a password: ')
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(user_password.encode(), salt)
-        print("Congratulations🎊!You are now one of the members of our app.")
-        print("Your username is:", username)
-        print("Your password is:", user_password)
-        print("Now, Let's add some of your favourite sport's events to make your personalised olympick schedule!🎊")
-        return username, hashed_password
+        if verify_new_username(username):
+            user_password = input('Please choose a password: ')
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(user_password.encode(), salt)
+            print("Congratulations🎊!You are now one of the members of our app.")
+            print("Your username is:", username)
+            print("Your password is:", user_password)
+            print("Now, Let's add some of your favourite sport's events to make your personalised olympick schedule!🎊")
+            return username, hashed_password
+        else:
+            return username_and_password()
     elif existing_user == 'yes':
         username = input('🎊It is great to see you again 🎊\nPlease enter your username to log in to the olympick app: ')
-        verify_existing_username(username)
-        user_password = input('Please enter your password: ')
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(user_password.encode(), salt)
-        verify_password(username, user_password)
-        print("🔐 Authentication was successful!Thank you for using our app again! ")
-        return username, hashed_password
+        if verify_existing_username(username):
+            user_password = input('Please enter your password: ')
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(user_password.encode(), salt)
+            verify_password(username, user_password)
+            print("🔐 Authentication was successful!Thank you for using our app again! ")
+            return username, hashed_password
+        else:
+            return username_and_password()
     else:
         raise ValueError("Please enter Yes or No")
 
@@ -220,6 +224,9 @@ def remove_event(result):
 
 # The second (2/2) "remove events" function - remove_event_from_database - is in the db_utils file. It uses the array
 # returned in the last function, and removes all of the events individually from that user's schedule within the
+# database. Further explanation is provided in the db_utils file.
+# Functions for tests:
+# Decorators removed for ease of testing:
 
 def find_sport_id_with_name(sport_name):
     try:

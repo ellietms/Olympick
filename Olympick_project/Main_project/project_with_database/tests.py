@@ -3,7 +3,7 @@ from unittest.mock import patch
 from use_functions_for_tests import list_of_all_sports, find_sport_id_with_name, list_of_all_events, find_sport_id_by_name
 
 #Creating a mock data for checking the data we get from the olympic public API
-class Test_list_of_all_sports_from_public_api(TestCase):
+class TestListOfAllSportsFromPublicApi(TestCase):
     @patch('use_functions_for_tests.list_of_all_sports')
     def test_list_of_all_sport_for_first_item(self, mock_data):
         mock_data.return_value.json.return_value = {
@@ -45,7 +45,7 @@ class Test_list_of_all_sports_from_public_api(TestCase):
 
 
 
-class Test_find_sport_id_with_name(TestCase):
+class TestFindSportIdWithName(TestCase):
     @patch('use_functions_for_tests.find_sport_id_with_name')
     def test_find_sport_id_with_name(self, mock_data):
         mock_data.return_value.json.return_value = {
@@ -66,7 +66,8 @@ class Test_find_sport_id_with_name(TestCase):
 
 
 
-class Test_get_list_of_all_specific_sport_events(TestCase):
+
+class TestGetListOfAllSpecificSportEvents(TestCase):
     @patch('use_functions_for_tests.list_of_all_events')
     def test_find_list_of_all_specific_sport_events_by_specific_id(self, mock_data):
         mock_data.return_value.json.return_value = {
@@ -111,7 +112,8 @@ class Test_get_list_of_all_specific_sport_events(TestCase):
 
 
 # Test of the complicated decorators( a decoratore which includes another decoratore inside of it)
-class Test_get_sport_events_by_name(TestCase):
+
+class TestGetSportEventsByName(TestCase):
     @patch('use_functions_for_tests.find_sport_id_by_name')
     def test_find_sport_id_by_name(self, mock_data):
         mock_data.return_value.json.return_value = {
@@ -148,7 +150,6 @@ class Test_get_sport_events_by_name(TestCase):
 
 
 
-
-
 if __name__ == "__main__":
     main()
+

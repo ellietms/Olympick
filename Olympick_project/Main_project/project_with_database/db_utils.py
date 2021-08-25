@@ -150,7 +150,7 @@ def verify_new_username(username):
         usernames = cur.fetchall()
         if usernames:
             print('Sorry this username already exists, please use another username and try again!')
-            all_functions.username_and_password()
+            return False
         else:
             pass
         cur.close()
@@ -161,7 +161,6 @@ def verify_new_username(username):
     finally:
         if db_connection:
             db_connection.close()
-
 
     return username
 
@@ -190,7 +189,7 @@ def verify_existing_username(username):
             print("Username accepted!")
         else:
             print("Sorry, this username doesn't exist, please make sure you are using the right username and try again!")
-            all_functions.username_and_password()
+            quit()
         cur.close()
 
     except Exception:
@@ -229,7 +228,7 @@ def verify_password(username, user_password):
             pass
         else:
             print("Sorry the password is not correct, please try again!")
-            all_functions.username_and_password()
+            quit()
         print("✅ Password is correct.")
         cur.close()
 
@@ -242,3 +241,6 @@ def verify_password(username, user_password):
 
 
     return user_password
+
+
+

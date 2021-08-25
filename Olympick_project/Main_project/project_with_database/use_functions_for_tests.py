@@ -1,7 +1,6 @@
 from all_functions import list_of_all_sports, find_sport_id_with_name, find_sport_id_by_name,list_of_all_events
 
 
-
 def list_of_all_sports():
     return list_of_all_sports()
 

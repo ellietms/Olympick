@@ -54,18 +54,18 @@ def add_user_view():
 
 @app.route('/add_new_user', methods=['POST'])
 def add_user():
-    try:
-        username = request.form['inputUserName']
-        password = request.form['inputPassword']
-        session['username'] = username
-        db_utils.verify_new_username(username)
+    username = request.form['inputUserName']
+    password = request.form['inputPassword']
+    session['username'] = username
+    if not db_utils.verify_new_username(username):
+        return render_template('username_already_exists.html')
+    else:
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode(), salt)
         session['hashed_password'] = hashed_password
         session['password'] = password
         return render_template('choose_to_view_schedule.html')
-    except Exception as e:
-        print(e)
+
 
 
 @app.route('/add_new_event', methods=['GET', 'POST'])
@@ -144,7 +144,12 @@ def events_removed():
         remove_from_database.append(event_to_remove)
     db_utils.remove_event_from_database(username, remove_from_database)
     schedule = db_utils.get_entire_schedule(username)
-    return render_template("schedule.html", data=schedule)
+    index = 0
+    list_of_events = []
+    for res in schedule:
+        index = index + 1
+        list_of_events.append([str(index), res[0], res[1], res[2]])
+    return render_template("schedule.html", data=list_of_events)
 
 
 if __name__ == '__main__':
