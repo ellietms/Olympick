@@ -189,7 +189,7 @@ def verify_existing_username(username):
             print("Username accepted!")
         else:
             print("Sorry, this username doesn't exist, please make sure you are using the right username and try again!")
-            quit()
+            return False
         cur.close()
 
     except Exception:
@@ -228,7 +228,7 @@ def verify_password(username, user_password):
             pass
         else:
             print("Sorry the password is not correct, please try again!")
-            quit()
+            return False
         print("✅ Password is correct.")
         cur.close()
 

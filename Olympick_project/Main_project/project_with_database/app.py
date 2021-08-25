@@ -18,18 +18,16 @@ def log_in():
 
 @app.route('/login', methods=['POST']) # have used app before
 def existing_user():
-    try:
-        username = request.form['inputUserName']
-        password = request.form['inputPassword']
-        db_utils.verify_existing_username(username)
-        db_utils.verify_password(username, password)
+    username = request.form['inputUserName']
+    password = request.form['inputPassword']
+    if db_utils.verify_existing_username(username) and db_utils.verify_password(username, password):
         session['username'] = username
         session['password'] = password
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode(), salt)
         session['hashed_password'] = hashed_password
         return render_template('choose_to_view_schedule.html')
-    except:
+    else:
         return render_template('incorrect_username_or_password.html')
 
 @app.route('/schedule')

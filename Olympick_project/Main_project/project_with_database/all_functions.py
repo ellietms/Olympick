@@ -68,9 +68,11 @@ def username_and_password():
             user_password = input('Please enter your password: ')
             salt = bcrypt.gensalt()
             hashed_password = bcrypt.hashpw(user_password.encode(), salt)
-            verify_password(username, user_password)
-            print("🔐 Authentication was successful!Thank you for using our app again! ")
-            return username, hashed_password
+            if verify_password(username, user_password):
+                print("🔐 Authentication was successful!Thank you for using our app again! ")
+                return username, hashed_password
+            else:
+                return username_and_password()
         else:
             return username_and_password()
     else:
